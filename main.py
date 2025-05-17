@@ -8,8 +8,6 @@ import random
 from generator import *
 from ks_jax_solver import *
 
-os.environ['XLA_PYTHON_CLIENT_-MEM_FRACTION'] = '0.5'
-
 # =========================================
 # USER INPUTS (PDE parameters)
 # =========================================
@@ -81,8 +79,9 @@ print("Original shape:", dataset_all_trajs.shape)
 dataset_all_trajs_transpose = np.transpose(dataset_all_trajs, (0, 1, 2, 3))
 print("Transposed to:", dataset_all_trajs_transpose.shape) 
 
-# Directory dependant on the initial condition
-base_dir = f"/local/disk1/stu_isuarez/apebench-scraped/data/1d/{pde}/{ic.__name__}" 
+# Directory dependant on the pde and initial condition
+base_dir = os.path.join("1d", pde, ic.__name__)
+os.makedirs(base_dir, exist_ok=True)
 file_name = "dataset.h5"
 data_path = os.path.join(base_dir, file_name)
 os.makedirs(os.path.dirname(data_path), exist_ok=True)

@@ -1,6 +1,6 @@
 {
     "filename": "main.py",
-    "path": "/local/disk1/stu_isuarez/apebench-scraped/data/synthetic_dataset_generation/1d/main.py",
+    "path": "/1d/main.py",
     "size_bytes": 3803,
     "last_modified": "2025-05-17T16:24:31.890003",
     "line_count": 129,
@@ -29,7 +29,7 @@
         "simulations": "50",
         "seed_list": "list(range(simulations))",
         "dataset_all_trajs_transpose": "np.transpose(dataset_all_trajs, (0, 1, 2, 3))",
-        "base_dir": "f'/local/disk1/stu_isuarez/apebench-scraped/data/synthetic_dataset_generation/1d/{pde}/{ic.__name__}'",
+        "base_dir": "f'/1d/{pde}/{ic.__name__}'",
         "file_name": "'dataset.h5'",
         "data_path": "os.path.join(base_dir, file_name)",
         "plots_dir": "os.path.join(base_dir, 'plots')",
