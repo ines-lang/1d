@@ -1,0 +1,40 @@
+{
+    "filename": "main.py",
+    "path": "/local/disk1/stu_isuarez/apebench-scraped/data/synthetic_dataset_generation/1d/main.py",
+    "size_bytes": 3803,
+    "last_modified": "2025-05-17T16:24:31.890003",
+    "line_count": 129,
+    "module_docstring": null,
+    "imports": [
+        "generator (from)",
+        "h5py",
+        "jax.numpy",
+        "kdv_jax_solver (from)",
+        "ks_jax_solver (from)",
+        "matplotlib.pyplot",
+        "numpy",
+        "os",
+        "random"
+    ],
+    "user_parameters": {
+        "pde": "'ks'",
+        "ic": "random_ic_fourier_jax",
+        "bc": "periodic_bc",
+        "x_bounds": "(0.0, 128.0)",
+        "x_res": "128",
+        "dt": "0.001",
+        "t_end": "100.0",
+        "save_freq": "10",
+        "nu": "0.5",
+        "simulations": "50",
+        "seed_list": "list(range(simulations))",
+        "dataset_all_trajs_transpose": "np.transpose(dataset_all_trajs, (0, 1, 2, 3))",
+        "base_dir": "f'/local/disk1/stu_isuarez/apebench-scraped/data/synthetic_dataset_generation/1d/{pde}/{ic.__name__}'",
+        "file_name": "'dataset.h5'",
+        "data_path": "os.path.join(base_dir, file_name)",
+        "plots_dir": "os.path.join(base_dir, 'plots')",
+        "selected_indices": "random.sample(range(len(seed_list)), 10)"
+    },
+    "h5_output_varname": "data_path",
+    "plots_directory": "os.path.join(base_dir, 'plots')"
+}
