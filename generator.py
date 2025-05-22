@@ -30,7 +30,7 @@ def neumann_bc(u, q_left=0.0, q_right=0.0, dx=1.0):
 def sine_ic_np(domain_length, k=1.0):
     return -np.sin(k * np.pi * domain_length)
 
-def sine_ic_jax(domain_length, k=1.0, amplitude=0.1): # change amplitude to 1 for KS and to 0.1 for KdV
+def sine_ic_jax(domain_length, k=1.0, amplitude=0.1):
     return -amplitude * jnp.sin(k * jnp.pi * domain_length)
 
 def gaussian_ic_np(domain_length, mu=1.0, sigma=0.2, amplitude=1.0):
@@ -71,11 +71,9 @@ def random_ic_fourier(domain_length, num_modes=10, seed=42, amplitude=1.0):
     return u0
 
 def sine_ic_jax(domain_length, k=1.0, amplitude=0.1):
-    """Smooth periodic IC for KdV or KS"""
     return -amplitude * jnp.sin(k * jnp.pi * domain_length)
 
 def gaussian_ic_jax(domain_length, mu=1.0, sigma=0.2, amplitude=1.0):
-    """Localized pulse, e.g., for soliton tests"""
     return amplitude * jnp.exp(-((domain_length - mu) ** 2) / (2 * sigma ** 2))
 
 def random_ic_fourier_jax(domain_length, seed, num_modes=20, amplitude=1.0):

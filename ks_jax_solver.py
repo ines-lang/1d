@@ -74,7 +74,6 @@ def solve_ks_1d_jax(ic, bc, x_bounds, x_res, dt, t_end, save_freq, seed_list):
                 break
             if t % save_freq == 0:
                 data.append(u)
-        #append the channel dimension to the dataset
         data=np.array(data)
         data = np.expand_dims(data, axis=1)
         data_all_trajs.append(data)

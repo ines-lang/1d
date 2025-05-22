@@ -4,6 +4,7 @@ import jax.numpy as jnp
 import h5py
 import os
 import random
+import time
 
 from generator import *
 from ks_jax_solver import *
@@ -91,7 +92,7 @@ with h5py.File(data_path, "w") as h5file:
     for sim_idx in range(len(seed_list)):
         seed = seed_list[sim_idx]
         u_xt = dataset_all_trajs[sim_idx, :, 0, :]  # 0 is valid as we have only one channel
-        dataset_name = f'velocity_{seed}'
+        dataset_name = f'velocity_{seed:03d}'
         h5file.create_dataset(dataset_name, data=u_xt)  
     print(f"File created at {data_path}")
     # Print structure 
@@ -106,6 +107,7 @@ with h5py.File(data_path, "w") as h5file:
 plots_dir = os.path.join(base_dir, "plots")
 os.makedirs(plots_dir, exist_ok=True)
 
+random.seed(time.time())
 selected_indices = random.sample(range(len(seed_list)), 10) # Plotting just X random seeds
 for sim_idx in selected_indices:
     seed = seed_list[sim_idx]

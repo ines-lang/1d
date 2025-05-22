@@ -1,0 +1,380 @@
+{
+    "@context": {
+      "@language": "en",
+      "@vocab": "https://schema.org/"
+    },
+    "@type": "sc:Dataset",
+    "name": "simple-pass",
+    "conformsTo": "http://mlcommons.org/croissant/1.0",
+    "description": "PASS is a large-scale image dataset that does not include any humans ...",
+    "citeAs": "@Article{asano21pass, author = \"Yuki M. Asano and Christian Rupprecht and ...",
+    "license": "https://creativecommons.org/licenses/by/4.0/",
+    "url": "https://www.robots.ox.ac.uk/~vgg/data/pass/",
+    "distribution": [
+        {
+        "@type": "cr:FileObject",
+        "@id": "metadata.csv",
+        "contentUrl": "https://zenodo.org/record/6615455/files/pass_metadata.csv",
+        "encodingFormat": "text/csv",
+        "sha256": "0b033707ea49365a5ffdd14615825511"
+        },
+        {
+        "@type": "cr:FileObject",
+        "@id": "pass9",
+        "contentUrl": "https://zenodo.org/record/6615455/files/PASS.9.tar",
+        "encodingFormat": "application/x-tar",
+        "sha256": "f4f87af4327fd1a66dd7944b9f59cbcc"
+        },
+        {
+        "@type": "cr:FileSet",
+        "@id": "image-files",
+        "containedIn": { "@id": "pass9" },
+        "encodingFormat": "image/jpeg",
+        "includes": "*.jpg"
+        }
+    ],
+    "recordSet": [
+        {
+        "@type": "cr:RecordSet",
+        "@id": "images",
+        "key": { "@id": "hash" },
+        "field": [
+            {
+            "@type": "cr:Field",
+            "@id": "images/image_content",
+            "description": "The image content.",
+            "dataType": "sc:ImageObject",
+            "source": {
+                "fileSet": { "@id": "image-files" },
+                "extract": {
+                "fileProperty": "content"
+                }
+            }
+            },
+        {
+          "@type": "cr:Field",
+          "@id": "images/hash",
+          "description": "The hash of the image, as computed from YFCC-100M.",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": { "@id": "image-files" },
+            "extract": {
+              "fileProperty": "filename"
+            },
+            "transform": {
+              "regex": "([^\\/]*)\\.jpg"
+            }
+          },
+          "references": { "@id": "metadata/hash" }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "images/date_taken",
+          "description": "The date the photo was taken.",
+          "dataType": "sc:Date",
+          "source": { "@id": "metadata/datetaken" }
+        }
+      ]
+    }
+  ]
+  "dct:conformsTo" : "http://mlcommons.org/croissant/1.0"
+},
+//  File Object
+{
+    "@type": "cr:FileObject",
+    "@id": "pass_metadata.csv",
+    "contentUrl": "https://zenodo.org/record/6615455/files/pass_metadata.csv",
+    "encodingFormat": "text/csv",
+    "sha256": "0b033707ea49365a5ffdd14615825511"
+  }
+//  File Set
+{
+    "@type": "cr:FileObject",
+    "@id": "train2014.zip",
+    "contentSize": "13510573713 B",
+    "contentUrl": "http://images.cocodataset.org/zips/train2014.zip",
+    "encodingFormat": "application/zip",
+    "sha256": "sha256"
+  },
+  {
+    "@type": "cr:FileSet",
+    "@id": "image-files",
+    "containedIn": { "@id": "train2014.zip" },
+    "encodingFormat": "image/jpeg",
+    "includes": "*.jpg"
+  }
+//  Record Set
+{
+"@type": "cr:RecordSet",
+"@id": "ratings",
+"key": [{ "@id": "ratings/user_id" }, { "@id": "ratings/movie_id" }],
+"field": [
+  {
+    "@type": "cr:Field",
+    "@id": "ratings/user_id",
+    "dataType": "sc:Integer",
+    "source": {
+      "fileObject": { "@id": "ratings-table" },
+      "extract": {
+        "column": "userId"
+      }
+    }
+  },
+  {
+    "@type": "cr:Field",
+    "@id": "ratings/movie_id",
+    "dataType": "sc:Integer",
+    "source": {
+      "fileObject": { "@id": "ratings-table" },
+      "extract": {
+        "column": "movieId"
+      }
+    },
+    "references": {
+      "@idfield": "movies/movie_id"
+    }
+  },
+  {
+    "@type": "cr:Field",
+    "@id": "ratings/rating",
+    "description": "The score of the rating on a five-star scale.",
+    "dataType": "sc:Float",
+    "source": {
+      "fileObject": { "@id": "ratings-table" },
+      "extract": {
+        "column": "rating"
+      }
+    }
+  },
+  {
+    "@type": "cr:Field",
+    "@id": "ratings/timestamp",
+    "dataType": "sc:Integer",
+    "source": {
+      "fileObject": { "@id": "ratings-table" },
+      "extract": {
+        "column": "timestamp"
+      }
+    }
+  }
+]
+}
+// Data Source
+{
+    "fileSet": {
+      "@id": "files"
+    },
+    "extract": {
+      "fileProperty": "filename"
+    },
+    "transform": {
+      "regex": "^(train|val|test)2014/.*\\.jpg$"
+    }
+  }
+// Data Types
+{
+    "@id": "images/color_sample",
+    "@type": "cr:Field",
+    "dataType": "sc:ImageObject"
+ }
+// Typing RecordSets
+{
+    "@id": "cities",
+    "@type": "cr:RecordSet",
+    "dataType": "sc:GeoCoordinates",
+    "field": [
+      {
+        "@id": "cities/latitude",
+        "@type": "cr:Field"
+      },
+      {
+        "@id": "cities/longitude",
+        "@type": "cr:Field"
+      }
+    ]
+  }
+// Embedding data
+{
+    "@type": "cr:RecordSet",
+    "@id": "gender_enum",
+    "description": "Maps gender ids (0, 1) to labeled values.",
+    "key": { "@id": "gender_enum/id" },
+    "field": [
+      { "@id": "gender_enum/id", "@type": "cr:Field", "dataType": "sc:Integer" },
+      { "@id": "gender_enum/label", "@type": "cr:Field", "dataType": "sc:String" }
+    ],
+    "data": [
+      { "gender_enum/id": 0, "gender_enum/label": "Male" },
+      { "gender_enum/id": 1, "gender_enum/label": "Female" }
+    ]
+  }
+// Joins
+{
+"@type": "cr:RecordSet",
+"@id": "ratings",
+"field": [
+  {
+    "@type": "cr:Field",
+    "@id": "ratings/movie_id",
+    "dataType": "sc:Integer",
+    "source": {
+      "fileObject": { "@id": "ratings-table" },
+      "extract": { "column": "movieId" }
+    },
+    "references": { "@id": "movies/movie_id" }
+  }
+]
+}
+{
+    "@type": "cr:RecordSet",
+    "@id": "ratings",
+    "field": [
+      {
+        "@type": "cr:Field",
+        "@id": "ratings/movie_id",
+        "dataType": "sc:Integer",
+        "source": {
+          "fileObject": { "@id": "ratings-table" },
+          "extract": {
+            "column": "movieId"
+          }
+        },
+        "references": {
+          "@id": "movies/movie_id"
+        }
+      },
+      {
+        "@type": "cr:Field",
+        "@id": "ratings/movie_title",
+        "dataType": "sc:Text",
+        "source": {
+          "@id": "movies/movie_title"
+        }
+      }
+    ]
+  }
+"recordSet": [
+  {
+    "@type": "cr:RecordSet",
+    "@id": "images",
+    "key": { "@id": "images/hash" },
+    "field": [
+      {
+        "@type": "cr:Field",
+        "@id": "images/hash",
+        "description": "The hash of the image, as computed from YFCC-100M.",
+        "dataType": "sc:Text",
+        "source": {
+          "fileSet": { "@id": "image-files" },
+          "extract": { "fileProperty": "filename" },
+          "transform": { "regex": "([^\\/]*)\\.jpg" }
+        },
+        "references": { "@id": "metadata/hash" }
+      },
+      {
+        "@type": "cr:Field",
+        "@id": "images/image_content",
+        "description": "The content of the image.",
+        "dataType": "sc:ImageObject",
+        "source": {
+          "fileSet": { "@id": "image-files" },
+          "extract": { "fileProperty": "content" }
+        }
+      },
+      {
+        "@type": "cr:Field",
+        "@id": "images/creator_uname",
+        "description": "Unique name of photo creator.",
+        "dataType": "sc:Text",
+        "source": {
+          "fileObject": { "@id": "metadata" },
+          "extract": { "column": "unickname" }
+        }
+      },
+      {
+        "@type": "cr:Field",
+        "@id": "images/date_taken",
+        "description": "The date the photo was taken.",
+        "dataType": "sc:Date",
+        "source": {
+          "fileObject": { "@id": "metadata" },
+          "extract": { "column": "datetaken" },
+          "transform": { "format": "%Y-%m-%d %H:%M:%S.%f" }
+        }
+      }
+    ]
+  }
+]
+// Hierarchical RecordSets
+// Nested Fields
+{
+    "@type": "cr:Field",
+    "@id": "gps_coordinates",
+    "description": "GPS coordinates where the image was taken.",
+    "dataType": "sc:GeoCoordinates",
+    "subField": [
+      {
+        "@type": "cr:Field",
+        "@id": "gps_coordinates/latitude",
+        "dataType": "sc:Float",
+        "source": {
+          "fileObject": { "@id": "metadata" },
+          "extract": { "column": "latitude" }
+        }
+      },
+      {
+        "@type": "cr:Field",
+        "@id": "gps_coordinates/longitude",
+        "dataType": "sc:Float",
+        "source": {
+          "fileObject": { "@id": "metadata" },
+          "extract": { "column": "longitude" }
+        }
+      }
+    ]
+  }
+// Nested Records
+{
+    "@type": "cr:RecordSet",
+    "@id": "movies_with_ratings",
+    "key": { "@id": "movies_with_ratings/movie_id" },
+    "field": [
+      {
+        "@type": "cr:Field",
+        "@id": "movies_with_ratings/movie_id",
+        "source": { "@id": "movies/movie_id" }
+      },
+      {
+        "@type": "cr:Field",
+        "@id": "movies_with_ratings/movie_title",
+        "source": { "@id": "movies/title" }
+      },
+      {
+        "@type": "cr:Field",
+        "@id": "movies_with_ratings/ratings",
+        "dataType": "cr:RecordSet",
+        "parentField": {
+          "source": { "@id": "ratings/movie_id" },
+          "references": { "@id": "movies_with_ratings/movie_id" }
+        },
+        "subField": [
+          {
+            "@type": "cr:Field",
+            "@id": "movies_with_ratings/ratings/user_id",
+            "source": { "@id": "ratings/user_id" }
+          },
+          {
+            "@type": "cr:Field",
+            "@id": "movies_with_ratings/ratings/rating",
+            "source": { "@id": "ratings/rating" }
+          },
+          {
+            "@type": "cr:Field",
+            "@id": "movies_with_ratings/ratings/timestamp",
+            "source": { "@id": "ratings/timestamp" }
+          }
+        ]
+      }
+    ]
+  }
+// ML-specific features
