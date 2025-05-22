@@ -11,12 +11,12 @@ GitHub repository: [https://github.com/ines-lang/1d](https://github.com/ines-lan
 The main script, `main.py`, allows the user to configure the simulation via parameters defined at the beginning of the file (USER INPUTS). The following PDE parameters can be adjusted:
 
 - **PDE** to solve (currently only `ks`)
-- **Initial condition**
-- **Boundary condition**
-- **Spatial domain** (`x_bounds`, `X_resolution`)
+- **Initial condition** (`ic`)
+- **Boundary condition** (`bc`)
+- **Spatial domain** (`x_bounds`, `x_res`)
 - **Time discretization** (`dt`, `t_end`, `save_frequency`)
 - **Viscosity coefficient** (`nu`)
-- **Number of simulations**
+- **Number of simulations** (`simulations`)
 
 ## File Structure
 
@@ -48,6 +48,12 @@ Additionally, the script randomly selects 10 simulations to visualize (this numb
 - **HDF5 datasets:** Named `velocity_{seed:03d}`.
 - **Shape of each dataset:** `(time_steps, spatial_points)`
 - **Data type:** `float32`
+
+## Notes and Recommendations
+
+- Among the available initial conditions, **`random_ic_fourier`** has been observed to provide the most stable and representative results for capturing the chaotic behavior of the Kuramoto–Sivashinsky equation.
+
+- The solver is implemented in **JAX** and makes use of the **Fast Fourier Transform (FFT)** internally. Therefore, boundary conditions are not explicitly enforced during simulation. For consistency, it is recommended to set the boundary condition parameter to `periodic_bc`, which aligns with the use of FFT-based solvers.
 
 ## License
 
