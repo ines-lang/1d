@@ -49,11 +49,15 @@ Additionally, the script randomly selects 10 simulations to visualize (this numb
 - **Shape of each dataset:** `(time_steps, spatial_points)`
 - **Data type:** `float32`
 
+Generic dataset for any data: returns data in B x T x H [x W [x D]] x C format.
+
 ## Notes and Recommendations
 
-- Among the available initial conditions, **`random_ic_fourier`** has been observed to provide the most stable and representative results for capturing the chaotic behavior of the Kuramoto–Sivashinsky equation.
+- For capturing the chaotic behavior of **Kuramoto–Sivashinsky equation**, among the available initial conditions, **`random_ic_fourier`** has been observed to provide the most stable and representative results.
 
 - The solver is implemented in **JAX** and makes use of the **Fast Fourier Transform (FFT)** internally. Therefore, boundary conditions are not explicitly enforced during simulation. For consistency, it is recommended to set the boundary condition parameter to `periodic_bc`, which aligns with the use of FFT-based solvers.
+
+- For **Burgers**, it works well with `nu` set around 0.5 and initial conditions `random_ic_fourier`.
 
 ## License
 

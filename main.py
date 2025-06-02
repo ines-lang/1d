@@ -48,7 +48,7 @@ simulations : int
     Number of simulations to run
 """
 
-pde = "ks"
+pde = "burgers"
 ic = random_ic_fourier_jax
 bc = periodic_bc 
 
@@ -57,7 +57,7 @@ x_res = 128
 dt = 0.001 
 t_end = 100.0 
 save_freq = 10
-nu = 0.5  
+nu = 0.5
 simulations = 50
 
 # =========================================
@@ -76,11 +76,9 @@ dataset_all_trajs, domain_length = generate_dataset(
     nu=nu,
     seed_list=seed_list)
 
-print("Original shape:", dataset_all_trajs.shape)
-dataset_all_trajs_transpose = np.transpose(dataset_all_trajs, (0, 1, 2, 3))
-print("Transposed to:", dataset_all_trajs_transpose.shape) 
+print("Original shape of the data from the solver:", dataset_all_trajs.shape)
 
-# Directory dependant on the pde and initial condition
+#  Directory dependant on the pde and initial condition
 base_dir = os.path.join("1d", pde, ic.__name__)
 os.makedirs(base_dir, exist_ok=True)
 file_name = "dataset.h5"
@@ -91,7 +89,7 @@ os.makedirs(os.path.dirname(data_path), exist_ok=True)
 with h5py.File(data_path, "w") as h5file:
     for sim_idx in range(len(seed_list)):
         seed = seed_list[sim_idx]
-        u_xt = dataset_all_trajs[sim_idx, :, 0, :]  # 0 is valid as we have only one channel
+        u_xt = dataset_all_trajs[sim_idx, :, :, 0]  # 0 is valid as we have only one channel
         dataset_name = f'velocity_{seed:03d}'
         h5file.create_dataset(dataset_name, data=u_xt)  
     print(f"File created at {data_path}")
@@ -103,6 +101,8 @@ with h5py.File(data_path, "w") as h5file:
             print(f"  Dataset: {name} - Shape: {obj.shape}, Dtype: {obj.dtype}")
     h5file.visititems(print_structure)
 
+# Normalize the dataset
+
 #Full space-time evolution plot
 plots_dir = os.path.join(base_dir, "plots")
 os.makedirs(plots_dir, exist_ok=True)
@@ -112,9 +112,9 @@ selected_indices = random.sample(range(len(seed_list)), 10) # Plotting just X ra
 for sim_idx in selected_indices:
     seed = seed_list[sim_idx]
     plt.figure(figsize=(10, 4))
-    t_array = np.linspace(0, t_end, dataset_all_trajs.shape[-1])
+    t_array = np.linspace(0, t_end, dataset_all_trajs.shape[1]) # changed from -1 to 1
     x_array = domain_length
-    u_xt = dataset_all_trajs[sim_idx, :, 0, :]  # 0 is valid as we have only one channel
+    u_xt = dataset_all_trajs[sim_idx, :, :, 0]  # 0 is valid as we have only one channel
     vabs = np.max(np.abs(u_xt))
     plt.imshow(u_xt.T, cmap='RdBu', origin='lower',
                extent=(t_array[0], t_array[-1], x_array[0], x_array[-1]),
@@ -123,7 +123,7 @@ for sim_idx in selected_indices:
     plt.colorbar(label='u(x, t)')
     plt.xlabel("Time step")
     plt.ylabel("Space")
-    plt.title(f"{ic.__name__} - {bc.__name__}- {seed}")
+    plt.title(f"{ic.__name__} - {bc.__name__}- seed {seed}")
     plt.tight_layout()
     plt.savefig(os.path.join(plots_dir, f"seed_{seed}.png"), dpi=150)
     plt.close()

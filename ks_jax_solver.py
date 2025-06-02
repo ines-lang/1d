@@ -74,8 +74,15 @@ def solve_ks_1d_jax(ic, bc, x_bounds, x_res, dt, t_end, save_freq, seed_list):
                 break
             if t % save_freq == 0:
                 data.append(u)
-        data=np.array(data)
-        data = np.expand_dims(data, axis=1)
-        data_all_trajs.append(data)
+        #append the channel dimension to the dataset
+        data=np.array(data) 
+        data = np.expand_dims(data, axis=-1) # new final dimension for the channel
+        data_all_trajs.append(data) # shape: (n_sim, t, x, 1)
+    data_all_trajs = np.array(data_all_trajs)  # shape: (n_sim, t, x, 1)
+    assert data_all_trajs.ndim == 4, "Output shape must be (n_sim, t, x, 1)"
+    assert data_all_trajs.shape[-1] == 1, "Last dim must be channel=1"
+    if data.shape[1] == 1 and data.shape[2] != 1:
+        # likely data came as (n_sim, t, 1, x) → fix it
+        data = np.transpose(data, (0, 2, 1))  # → (n_sim, t, x, 1)
 
-    return np.array(data_all_trajs), np.array(domain_length)
+    return data_all_trajs, np.array(domain_length)
